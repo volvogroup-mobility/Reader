@@ -1,6 +1,6 @@
 //
 //	ThumbsViewController.m
-//	Reader v2.8.6
+//	Reader v2.8.8-volvo1.3.0
 //
 //	Created by Julius Oklamcak on 2011-09-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
@@ -91,6 +91,15 @@
 	[super viewDidLoad];
 
 	assert(delegate != nil); assert(document != nil);
+    
+    CGFloat safeAreaTopMargin = 0.0;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        if (screenSize.height == 812.0f && screenSize.width == 375.0f) { // iPhone X portrait
+            safeAreaTopMargin = 34.0;
+        }
+    }
 
 	self.view.backgroundColor = [UIColor grayColor]; // Neutral gray
 
@@ -115,7 +124,7 @@
 	NSString *toolbarTitle = [document.fileName stringByDeletingPathExtension];
 
 	CGRect toolbarRect = scrollViewRect; // Toolbar frame
-	toolbarRect.size.height = TOOLBAR_HEIGHT; // Default toolbar height
+	toolbarRect.size.height = TOOLBAR_HEIGHT + safeAreaTopMargin; // Default toolbar height
 	mainToolbar = [[ThumbsMainToolbar alloc] initWithFrame:toolbarRect title:toolbarTitle]; // ThumbsMainToolbar
 	mainToolbar.delegate = self; // ThumbsMainToolbarDelegate
 	[self.view addSubview:mainToolbar];
@@ -159,6 +168,7 @@
 	[super viewWillAppear:animated];
 
 	[theThumbsView reloadThumbsCenterOnIndex:([document.pageNumber integerValue] - 1)]; // Page
+	[UIApplication sharedApplication].statusBarHidden = TRUE;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -169,6 +179,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
+	[UIApplication sharedApplication].statusBarHidden = FALSE;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -207,15 +218,43 @@
 {
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
-{
-}
-
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	//if (fromInterfaceOrientation == self.interfaceOrientation) return;
 }
 */
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+{
+
+    CGFloat safeAreaTopMargin = 0.0;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) { // only updates mainToolBar if iPhone X
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        
+        if ((screenSize.height == 812.0f && screenSize.width == 375.0f) || (screenSize.height == 375.0f && screenSize.width == 812.0f)) { // iPhone X
+            
+            if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+                safeAreaTopMargin = 34.0;
+                
+            } else if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+                safeAreaTopMargin = 0.0;
+            }
+            
+            NSString *toolbarTitle = [document.fileName stringByDeletingPathExtension];
+            
+            CGRect scrollViewRect = self.view.bounds;
+            CGRect toolbarRect = scrollViewRect; // Toolbar frame
+            toolbarRect.size.height = TOOLBAR_HEIGHT + safeAreaTopMargin;
+
+            mainToolbar.frame = toolbarRect;
+            
+            [mainToolbar updateToolBar:toolbarRect title:toolbarTitle];
+        }
+    }
+    
+    [self.delegate didChangeToOrientation:interfaceOrientation];
+}
 
 - (void)didReceiveMemoryWarning
 {
