@@ -1,6 +1,11 @@
 
 ## History
 
+2021-11-06: Version 2.8.8-volvo1.0.0
+    - Split App and Framework code into 2 targets
+    - Migrated to XCAssets
+    - Added PodSpec
+    
 2016-09-28: Version 2.8.8
 
 	- iOS deployment target is now 8.0
