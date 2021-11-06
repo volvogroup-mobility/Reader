@@ -180,7 +180,7 @@
 
 	if (document != nil) // Must have a valid ReaderDocument object in order to proceed with things
 	{
-		ReaderViewController *readerViewController = [[ReaderViewController alloc] initWithReaderDocument:document];
+		ReaderViewController *readerViewController = [[ReaderViewController alloc] initWithReaderDocument:document mailDisclaimer:nil];
 
 		readerViewController.delegate = self; // Set the ReaderViewController delegate to self
 

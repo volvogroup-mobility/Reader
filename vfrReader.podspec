@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "vfrReader"
-  s.version      = "2.8.8-volvo1.0.0"
+  s.version      = "2.8.8-volvo1.3.0"
   s.summary      = "PDF Reader Core for iOS"
 
   s.homepage     = "https://github.com/vfr/Reader"

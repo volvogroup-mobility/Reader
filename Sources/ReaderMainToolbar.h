@@ -54,4 +54,5 @@
 - (void)hideToolbar;
 - (void)showToolbar;
 
+- (void)updateToolBar:(CGRect)frame document:(ReaderDocument *)document;
 @end

@@ -1,6 +1,16 @@
 
 ## History
 
+2021-11-06: Version 2.8.8-volvo1.3.0
+    - Hide the status bar without view controller based option
+    - Add Dutch localization.
+    - Add ability to disable email button in framework.
+    - Update Reader action/export icon to match Apple guideline.
+    - Enable Mail button in Share menu
+    - Fix navigation bar for iPhone X
+    - Fix for accessing UIView on background thread.
+    - Support for mail disclaimer
+    
 2021-11-06: Version 2.8.8-volvo1.0.0
     - Split App and Framework code into 2 targets
     - Migrated to XCAssets

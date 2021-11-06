@@ -39,6 +39,8 @@
 
 - (void)dismissThumbsViewController:(ThumbsViewController *)viewController;
 
+- (void)didChangeToOrientation:(UIInterfaceOrientation *)interfaceOrientation;
+
 @end
 
 @interface ThumbsViewController : UIViewController
