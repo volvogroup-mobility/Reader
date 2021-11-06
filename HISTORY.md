@@ -1,6 +1,28 @@
 
 ## History
 
+2025-02-14: Version 2.9.0-abvolvo.1
+    - Split code into framework target and demo app target
+	- Migrate Resource to xcassets
+	- Post of 2.8.8-volvo1.3.0 / v20180200 from internal repo
+	- Set min deployment version to 11
+	- Add SPM Support
+
+2021-11-06: Version 2.8.8-volvo1.3.0
+    - Hide the status bar without view controller based option
+    - Add Dutch localization.
+    - Add ability to disable email button in framework.
+    - Update Reader action/export icon to match Apple guideline.
+    - Enable Mail button in Share menu
+    - Fix navigation bar for iPhone X
+    - Fix for accessing UIView on background thread.
+    - Support for mail disclaimer
+    
+2021-11-06: Version 2.8.8-volvo1.0.0
+    - Split App and Framework code into 2 targets
+    - Migrated to XCAssets
+    - Added PodSpec
+    
 2016-09-28: Version 2.8.8
 
 	- iOS deployment target is now 8.0
