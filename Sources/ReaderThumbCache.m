@@ -1,6 +1,6 @@
 //
 //	ReaderThumbCache.m
-//	Reader v2.9.0
+//	Reader v2.8.8
 //
 //	Created by Julius Oklamcak on 2011-09-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
