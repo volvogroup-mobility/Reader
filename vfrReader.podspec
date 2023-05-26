@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     "Timothy Rundle" => "timothy.rundle@volvo.com",
     "Zack Henson" => "zack.henson@volvo.com"
   }
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "11.0"
   s.source       = { :git => "https://github.com/volvogroup-mobility/Reader", :tag => "#{s.version}" }
   s.source_files  = "Sources/**/*.{h,m}"
   s.resources = [
