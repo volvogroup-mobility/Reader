@@ -1,0 +1,6 @@
+#import "../Sources/ReaderConstants.h"
+#import "../Sources/ReaderViewController.h"
+#import "../Sources/ReaderThumbCache.h"
+#import "../Sources/ReaderThumbRequest.h"
+#import "../Sources/ReaderDocument.h"
+#import "../Sources/CGPDFDocument.h"

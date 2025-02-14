@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "470345D92736B707004A3EC1"
-               BuildableName = "Reader.framework"
-               BlueprintName = "Reader"
+               BuildableName = "ReaderDemo.framework"
+               BlueprintName = "ReaderDemo"
                ReferencedContainer = "container:Reader.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "470345D92736B707004A3EC1"
-            BuildableName = "Reader.framework"
-            BlueprintName = "Reader"
+            BuildableName = "ReaderDemo.framework"
+            BlueprintName = "ReaderDemo"
             ReferencedContainer = "container:Reader.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
