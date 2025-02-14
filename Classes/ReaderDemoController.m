@@ -1,6 +1,6 @@
 //
 //	ReaderDemoController.m
-//	Reader v2.9.0
+//	Reader v2.8.8-volvo1.3.0
 //
 //	Created by Julius Oklamcak on 2011-07-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
@@ -180,7 +180,7 @@
 
 	if (document != nil) // Must have a valid ReaderDocument object in order to proceed with things
 	{
-		ReaderViewController *readerViewController = [[ReaderViewController alloc] initWithReaderDocument:document];
+		ReaderViewController *readerViewController = [[ReaderViewController alloc] initWithReaderDocument:document mailDisclaimer:nil];
 
 		readerViewController.delegate = self; // Set the ReaderViewController delegate to self
 

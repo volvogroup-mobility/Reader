@@ -1,6 +1,6 @@
 //
 //	ThumbsViewController.h
-//	Reader v2.8.6
+//	Reader v2.8.8-volvo1.3.0
 //
 //	Created by Julius Oklamcak on 2011-09-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
@@ -38,6 +38,8 @@
 - (void)thumbsViewController:(ThumbsViewController *)viewController gotoPage:(NSInteger)page;
 
 - (void)dismissThumbsViewController:(ThumbsViewController *)viewController;
+
+- (void)didChangeToOrientation:(UIInterfaceOrientation *)interfaceOrientation;
 
 @end
 

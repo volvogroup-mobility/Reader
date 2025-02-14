@@ -1,6 +1,6 @@
 //
 //	ReaderViewController.m
-//	Reader v2.8.6
+//	Reader v2.8.8-volvo1.3.0
 //
 //	Created by Julius Oklamcak on 2011-07-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
@@ -36,6 +36,9 @@
 
 @interface ReaderViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate, UIDocumentInteractionControllerDelegate,
 									ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate, ThumbsViewControllerDelegate>
+
+@property (copy, nonatomic) NSString *mailDisclaimer;
+
 @end
 
 @implementation ReaderViewController
@@ -286,7 +289,7 @@
 
 #pragma mark - UIViewController methods
 
-- (instancetype)initWithReaderDocument:(ReaderDocument *)object
+- (instancetype)initWithReaderDocument:(ReaderDocument *)object mailDisclaimer:(NSString *)disclaimer
 {
 	if ((self = [super initWithNibName:nil bundle:nil])) // Initialize superclass
 	{
@@ -305,6 +308,8 @@
 			[object updateDocumentProperties]; document = object; // Retain the supplied ReaderDocument object for our use
 
 			[ReaderThumbCache touchThumbCacheWithGUID:object.guid]; // Touch the document thumb cache directory
+            
+            _mailDisclaimer = disclaimer;
 		}
 		else // Invalid ReaderDocument object
 		{
@@ -327,7 +332,16 @@
 	assert(document != nil); // Must have a valid ReaderDocument
 
 	self.view.backgroundColor = [UIColor grayColor]; // Neutral gray
-
+    
+    CGFloat safeAreaTopMargin = 0.0;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        if (screenSize.height == 812.0f && screenSize.width == 375.0f) { // iPhone X portrait
+            safeAreaTopMargin = 34.0;
+        }
+    }
+    
 	UIView *fakeStatusBar = nil; CGRect viewRect = self.view.bounds; // View bounds
 
 	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) // iOS 7+
@@ -353,8 +367,8 @@
 	theScrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	theScrollView.backgroundColor = [UIColor clearColor]; theScrollView.delegate = self;
 	[self.view addSubview:theScrollView];
-
-	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
+    
+	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT + safeAreaTopMargin;
 	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
 	mainToolbar.delegate = self; // ReaderMainToolbarDelegate
 	[self.view addSubview:mainToolbar];
@@ -384,6 +398,7 @@
 	contentViews = [NSMutableDictionary new]; lastHideTime = [NSDate date];
 
 	minimumPage = 1; maximumPage = [document.pageCount integerValue];
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -392,23 +407,25 @@
 
 	if (CGSizeEqualToSize(lastAppearSize, CGSizeZero) == false)
 	{
-		if (CGSizeEqualToSize(lastAppearSize, self.view.bounds.size) == false)
-		{
-			[self updateContentViews:theScrollView]; // Update content views
-		}
-
+        if (CGSizeEqualToSize(lastAppearSize, self.view.bounds.size) == false)
+        {
+            [self updateContentViews:theScrollView]; // Update content views
+        }
+        
 		lastAppearSize = CGSizeZero; // Reset view size tracking
 	}
+	
+	[UIApplication sharedApplication].statusBarHidden = TRUE;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
 
-	if (CGSizeEqualToSize(theScrollView.contentSize, CGSizeZero) == true)
-	{
+    if (CGSizeEqualToSize(theScrollView.contentSize, CGSizeZero) == true)
+    {
 		[self performSelector:@selector(showDocument) withObject:nil afterDelay:0.0];
-	}
+    }
 
 #if (READER_DISABLE_IDLE == TRUE) // Option
 
@@ -422,6 +439,7 @@
 	[super viewWillDisappear:animated];
 
 	lastAppearSize = self.view.bounds.size; // Track view size
+	[UIApplication sharedApplication].statusBarHidden = FALSE;
 
 #if (READER_DISABLE_IDLE == TRUE) // Option
 
@@ -476,10 +494,35 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
-	if (CGSizeEqualToSize(theScrollView.contentSize, CGSizeZero) == false)
-	{
-		[self updateContentViews:theScrollView]; lastAppearSize = CGSizeZero;
-	}
+    [self updateOrientation:interfaceOrientation];
+}
+
+- (void)updateOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    if (CGSizeEqualToSize(theScrollView.contentSize, CGSizeZero) == false)
+    {
+        [self updateContentViews:theScrollView]; lastAppearSize = CGSizeZero;
+        
+        CGFloat safeAreaTopMargin = 0.0;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) { // only updates mainToolBar if iPhone X
+            CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+            
+            if ((screenSize.height == 812.0f && screenSize.width == 375.0f) || (screenSize.height == 375.0f && screenSize.width == 812.0f)) { // iPhone X
+                
+                if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+                    safeAreaTopMargin = 34.0;
+                    
+                } else if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+                    safeAreaTopMargin = 0.0;
+                }
+                
+                CGRect viewRect = self.view.bounds;
+                CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT + safeAreaTopMargin;
+                mainToolbar.frame = toolbarRect;
+                [mainToolbar updateToolBar:toolbarRect document:document];
+            }
+        }
+    }
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -747,7 +790,7 @@
 
 	documentInteraction.delegate = self; // UIDocumentInteractionControllerDelegate
 
-	[documentInteraction presentOpenInMenuFromRect:button.bounds inView:button animated:YES];
+	[documentInteraction presentOptionsMenuFromRect:button.bounds inView:button animated:YES];
 }
 
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar printButton:(UIButton *)button
@@ -819,7 +862,7 @@
 
 			mailComposer.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 			mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
-
+            [mailComposer setMessageBody:self.mailDisclaimer isHTML:false];
 			mailComposer.mailComposeDelegate = self; // MFMailComposeViewControllerDelegate
 
 			[self presentViewController:mailComposer animated:YES completion:NULL];
@@ -872,6 +915,11 @@
 	[self showDocumentPage:page];
 
 #endif // end of READER_ENABLE_THUMBS Option
+}
+
+- (void)didChangeToOrientation:(UIInterfaceOrientation *)interfaceOrientation {
+    
+    [self updateOrientation:interfaceOrientation];
 }
 
 - (void)dismissThumbsViewController:(ThumbsViewController *)viewController

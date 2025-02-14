@@ -1,6 +1,6 @@
 //
 //	ThumbsMainToolbar.h
-//	Reader v2.8.6
+//	Reader v2.8.8-volvo1.3.0
 //
 //	Created by Julius Oklamcak on 2011-09-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
@@ -43,5 +43,5 @@
 @property (nonatomic, weak, readwrite) id <ThumbsMainToolbarDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame title:(NSString *)title;
-
+- (void)updateToolBar:(CGRect)frame title:(NSString *)title;
 @end

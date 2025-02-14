@@ -1,6 +1,6 @@
 //
 //	ReaderConstants.h
-//	Reader v2.8.6
+//	Reader v2.8.8-volvo1.3.0
 //
 //	Created by Julius Oklamcak on 2011-07-01.
 //	Copyright © 2011-2015 Julius Oklamcak. All rights reserved.
@@ -36,4 +36,5 @@
 #define READER_ENABLE_PREVIEW TRUE
 #define READER_DISABLE_IDLE FALSE
 #define READER_STANDALONE FALSE
-#define READER_BOOKMARKS TRUE
+#define READER_BOOKMARKS FALSE
+#define READER_ENABLE_EMAIL TRUE
